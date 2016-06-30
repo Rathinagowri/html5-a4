@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<body>
+<p> Press first button to set coordinates and then press get address to get location</p>
+<button onclick="getLocation();setDisplay('a', 'block');">First click this button to get latitude and longitude</button>
+<form name=myForm>
+
+    <input type="text" id="txtLatitude" style="display:none"/>
+    <input type="text" id="txtLongitude" style="display:none"/>
+    <input type="button" value="Get Address" onclick="GetAddress()" id="a"  style="display:none"/>
+</form>
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+
+<p id="a1"></p>
+
+<script>
+function setDisplay(id,attribute){
+        document.getElementById(id).style.display = attribute;
+    }
+
+var x = document.getElementById("a1");
+
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    }
+}
+
+function showPosition(position) {
+document.forms["myForm"]["txtLatitude"].value = position.coords.latitude;
+document.forms["myForm"]["txtLongitude"].value = position.coords.longitude;
+    x.innerHTML = "Latitude: " + position.coords.latitude + 
+    "<br>Longitude: " + position.coords.longitude;
+}
+ function GetAddress() {
+            var lat = parseFloat(document.getElementById("txtLatitude").value);
+            var lng = parseFloat(document.getElementById("txtLongitude").value);
+            var latlng = new google.maps.LatLng(lat, lng);
+            var geocoder = geocoder = new google.maps.Geocoder();
+            geocoder.geocode({ 'latLng': latlng }, function (results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    if (results[1]) {
+                        document.getElementById("a1").innerHTML = results[1].formatted_address;
+                    }
+                }
+            });
+        }
+</script>
+
+</body>
+</html>
